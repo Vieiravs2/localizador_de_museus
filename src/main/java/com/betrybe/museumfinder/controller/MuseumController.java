@@ -65,13 +65,13 @@ public class MuseumController {
    */
   @GetMapping("/{id}")
   public ResponseEntity<MuseumDto> getMuseum(@PathVariable Long id) {
-    Museum museum = this.museumService.getMuseum(id);
-    
+    Museum museum = this.service.getMuseum(id);
+
     if (museum == null) {
       return ResponseEntity.notFound().build();
     }
 
-    MuseumDto museumDto = ModelDtoConverter.modelToDto(museum); // Convertendo usando ModelDtoConverter
+    MuseumDto museumDto = ModelDtoConverter.modelToDto(museum);
     return ResponseEntity.status(HttpStatus.OK).body(museumDto);
   }
 
