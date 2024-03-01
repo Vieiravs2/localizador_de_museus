@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class MuseumController {
   }
 
   /**
-   * MuseumController Methods.
+   * Get CLosest Museum.
    */
 
   @GetMapping("/closest")
@@ -49,7 +50,7 @@ public class MuseumController {
   }
 
   /**
-   * MuseumController Methods.
+   * Create Museum.
    */
   @PostMapping
   public ResponseEntity<MuseumDto> createMuseum(@Valid @RequestBody MuseumCreationDto museum) {
@@ -57,6 +58,21 @@ public class MuseumController {
     Museum createdMuseum = this.service.createMuseum(museumDto);
     MuseumDto convertedMuseum = ModelDtoConverter.modelToDto(createdMuseum);
     return ResponseEntity.status(HttpStatus.CREATED).body(convertedMuseum);
+  }
+
+  /**
+   * Get Museum.
+   */
+  @GetMapping("/{id}")
+  public ResponseEntity<MuseumDto> getMuseum(@PathVariable Long id) {
+    Museum museum = this.museumService.getMuseum(id);
+    
+    if (museum == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    MuseumDto museumDto = ModelDtoConverter.modelToDto(museum); // Convertendo usando ModelDtoConverter
+    return ResponseEntity.status(HttpStatus.OK).body(museumDto);
   }
 
 }
