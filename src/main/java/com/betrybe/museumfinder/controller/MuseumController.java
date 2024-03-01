@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -39,14 +40,14 @@ public class MuseumController {
 
   @GetMapping("/closest")
   public ResponseEntity<MuseumDto> getClosestMuseum(
-      @Valid @ModelAttribute LocationRequest locationRequest
+      @RequestParam(name = "lat") double lat,
+      @RequestParam(name = "lng") double lng,
+      @RequestParam(name = "max_dist_km") double distance
   ) {
-    Coordinate coordinate = new Coordinate(locationRequest.getLat(), locationRequest.getLng());
-    Museum closestMuseum = this.service.getClosestMuseum(
-        coordinate, locationRequest.getMaxDistKm()
-    );
-    MuseumDto convertedMuseum = ModelDtoConverter.modelToDto(closestMuseum);
-    return ResponseEntity.ok(convertedMuseum);
+    Coordinate coordinate = new Coordinate(lat, lng);
+    Museum getMuseum = this.service.getClosestMuseum(coordinate, distance);
+    MuseumDto convertedMuseum = ModelDtoConverter.modelToDto(getMuseum);
+    return ResponseEntity.status(HttpStatus.OK).body(convertedMuseum);
   }
 
   /**
@@ -58,21 +59,6 @@ public class MuseumController {
     Museum createdMuseum = this.service.createMuseum(museumDto);
     MuseumDto convertedMuseum = ModelDtoConverter.modelToDto(createdMuseum);
     return ResponseEntity.status(HttpStatus.CREATED).body(convertedMuseum);
-  }
-
-  /**
-   * Get Museum.
-   */
-  @GetMapping("/{id}")
-  public ResponseEntity<MuseumDto> getMuseum(@PathVariable Long id) {
-    Museum museum = this.service.getMuseum(id);
-
-    if (museum == null) {
-      return ResponseEntity.notFound().build();
-    }
-
-    MuseumDto museumDto = ModelDtoConverter.modelToDto(museum);
-    return ResponseEntity.status(HttpStatus.OK).body(museumDto);
   }
 
 }

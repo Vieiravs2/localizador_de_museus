@@ -5,7 +5,7 @@ package com.betrybe.museumfinder.exception;
  */
 
 public class InvalidCoordinateException extends RuntimeException {
-  private static final String errorMessage = "Coordenada inválida";
+  private static final String errorMessage = "Coordenada inválida!";
 
   public InvalidCoordinateException() {
     super(errorMessage);

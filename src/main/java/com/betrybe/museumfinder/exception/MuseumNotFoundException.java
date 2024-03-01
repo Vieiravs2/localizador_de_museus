@@ -5,7 +5,7 @@ package com.betrybe.museumfinder.exception;
  */
 
 public class MuseumNotFoundException extends RuntimeException {
-  private static final String errorMessage = "Esse Museu não foi encontrado";
+  private static final String errorMessage = "Museu não encontrado!";
 
   public MuseumNotFoundException() {
     super(errorMessage);
